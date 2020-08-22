@@ -91,6 +91,20 @@ const FoodDetails: React.FC = () => {
     loadFood();
   }, [routeParams]);
 
+  useEffect(() => {
+    async function checkFavorite(): Promise<void> {
+      const response = await api.get('/favorites');
+
+      const favorites = response.data.map((fav: Food) => fav.id);
+
+      if (favorites.includes(food.id)) {
+        setIsFavorite(true);
+      }
+    }
+
+    checkFavorite();
+  }, [food]);
+
   function handleIncrementExtra(id: number): void {
     setExtras(
       extras.map(extra =>
